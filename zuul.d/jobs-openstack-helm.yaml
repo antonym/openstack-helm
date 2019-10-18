@@ -18,7 +18,7 @@
 # These will move with their playbooks inside the
 # openstack-helm-infra repository
 - job:
-    name: openstack-helm-functional-temp
+    name: openstack-helm-functional
     irrelevant-files:
       - ^.*\.rst$
       - ^doc/.*$
@@ -37,7 +37,7 @@
 
 - job:
     name: openstack-helm-chart-deploy
-    parent: openstack-helm-functional-temp
+    parent: openstack-helm-functional
     roles:
       - zuul: openstack/openstack-helm-infra
     timeout: 7200
@@ -328,28 +328,54 @@
         - ./tools/deployment/common/test-networkpolicy.sh
 
 - job:
-    name: openstack-helm-multinode-temp
-    parent: openstack-helm-functional-temp
+    name: openstack-helm-multinode
+    parent: openstack-helm-functional
+    nodeset: openstack-helm-five-node-ubuntu
     roles:
       - zuul: openstack/openstack-helm-infra
-    vars:
-      osh_openstack_release: newton
-      zuul_osh_infra_relative_path: ../openstack-helm-infra/
     timeout: 7200
     pre-run:
       - tools/gate/playbooks/osh-infra-upgrade-host.yaml
       - tools/gate/playbooks/osh-infra-deploy-docker.yaml
       - tools/gate/playbooks/osh-infra-build.yaml
       - tools/gate/playbooks/osh-infra-deploy-k8s.yaml
-    run: tools/gate/playbooks/multinode-deploy.yaml
+    run: tools/gate/playbooks/osh-gate-runner.yaml
     post-run: tools/gate/playbooks/osh-infra-collect-logs.yaml
     required-projects:
       - openstack/openstack-helm-infra
+    vars:
+      zuul_osh_infra_relative_path: ../openstack-helm-infra/
+      osh_params:
+        openstack_release: ocata
+        container_distro_name: ubuntu
+        container_distro_version: xenial
+      gate_scripts:
+        - ./tools/deployment/multinode/010-setup-client.sh
+        - ./tools/deployment/multinode/020-ingress.sh
+        - ./tools/deployment/multinode/030-ceph.sh
+        - ./tools/deployment/multinode/040-ceph-ns-activate.sh
+        - ./tools/deployment/multinode/050-mariadb.sh
+        - ./tools/deployment/multinode/060-rabbitmq.sh
+        - ./tools/deployment/multinode/070-memcached.sh
+        - ./tools/deployment/multinode/080-keystone.sh
+        - ./tools/deployment/multinode/090-ceph-radosgateway.sh
+        - ./tools/deployment/multinode/100-glance.sh
+        - ./tools/deployment/multinode/110-cinder.sh
+        - ./tools/deployment/multinode/120-openvswitch.sh
+        - ./tools/deployment/multinode/130-libvirt.sh
+        - ./tools/deployment/multinode/140-compute-kit.sh
+        - ./tools/deployment/multinode/150-heat.sh
+        - ./tools/deployment/multinode/160-barbican.sh
+        - ./tools/deployment/multinode/170-senlin.sh
+        - ./tools/deployment/multinode/180-mistral.sh
+        - ./tools/deployment/multinode/190-magnum.sh
+        - ./tools/deployment/multinode/200-congress.sh
+        - ./tools/deployment/multinode/210-postgresql.sh
 
 - job:
     timeout: 9600
     name: openstack-helm-armada-deploy
-    parent: openstack-helm-functional-temp
+    parent: openstack-helm-functional
     nodeset: openstack-helm-five-node-ubuntu
     roles:
       - zuul: openstack/openstack-helm-infra
@@ -376,7 +402,7 @@
 - job:
     timeout: 9600
     name: openstack-helm-armada-update-uuid
-    parent: openstack-helm-functional-temp
+    parent: openstack-helm-functional
     nodeset: openstack-helm-five-node-ubuntu
     roles:
       - zuul: openstack/openstack-helm-infra
@@ -404,7 +430,7 @@
 - job:
     timeout: 10800
     name: openstack-helm-armada-update-passwords
-    parent: openstack-helm-functional-temp
+    parent: openstack-helm-functional
     nodeset: openstack-helm-five-node-ubuntu
     roles:
       - zuul: openstack/openstack-helm-infra
@@ -430,29 +456,29 @@
         - ./tools/deployment/armada/040-armada-update-passwords.sh
 
 - job:
-    name: openstack-helm-multinode-temp-ubuntu
-    parent: openstack-helm-multinode-temp
+    name: openstack-helm-multinode-ubuntu
+    parent: openstack-helm-multinode
     nodeset: openstack-helm-five-node-ubuntu
 
 - job:
-    name: openstack-helm-multinode-temp-centos
-    parent: openstack-helm-multinode-temp
+    name: openstack-helm-multinode-centos
+    parent: openstack-helm-multinode
     nodeset: openstack-helm-five-node-centos
 
 - job:
-    name: openstack-helm-multinode-temp-fedora
-    parent: openstack-helm-multinode-temp
+    name: openstack-helm-multinode-fedora
+    parent: openstack-helm-multinode
     nodeset: openstack-helm-five-node-fedora
 
 - job:
     name: openstack-helm-ironic-ubuntu
-    parent: openstack-helm-multinode-temp
+    parent: openstack-helm-multinode
     nodeset: openstack-helm-ubuntu
     run: tools/gate/playbooks/ironic-deploy.yaml
 
 - job:
     timeout: 10800
-    name: openstack-helm-multinode-temp-tempest
-    parent: openstack-helm-multinode-temp
+    name: openstack-helm-multinode-tempest
+    parent: openstack-helm-multinode
     nodeset: openstack-helm-five-node-ubuntu
     run: tools/gate/playbooks/multinode-tempest-deploy.yaml

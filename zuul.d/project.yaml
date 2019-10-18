@@ -24,28 +24,29 @@
     check:
       jobs:
         - openstack-helm-lint
-        - openstack-helm-bandit
-        - openstack-helm-cinder
-        - openstack-helm-cinder-pike-ubuntu_xenial
-        - openstack-helm-cinder-queens-ubuntu_xenial
-        - openstack-helm-cinder-rocky-ubuntu_xenial
-        - openstack-helm-cinder-rocky-ubuntu_bionic
-        - openstack-helm-cinder-rocky-opensuse_15
-        - openstack-helm-cinder-stein-ubuntu_bionic
-        - openstack-helm-compute-kit
-        - openstack-helm-compute-kit-pike-ubuntu_xenial
-        - openstack-helm-compute-kit-queens-ubuntu_xenial
-        - openstack-helm-compute-kit-rocky-ubuntu_xenial
-        - openstack-helm-compute-kit-rocky-ubuntu_bionic
-        - openstack-helm-compute-kit-rocky-opensuse_15
-        - openstack-helm-compute-kit-stein-ubuntu_bionic
-        - openstack-helm-horizon
-        - openstack-helm-apparmor:
-            voting: false
-        - openstack-helm-netpol-compute-kit:
-            voting: false
-        - openstack-helm-netpol-cinder:
-            voting: false
+        - openstack-helm-multinode
+        # - openstack-helm-bandit
+        # - openstack-helm-cinder
+        # - openstack-helm-cinder-pike-ubuntu_xenial
+        # - openstack-helm-cinder-queens-ubuntu_xenial
+        # - openstack-helm-cinder-rocky-ubuntu_xenial
+        # - openstack-helm-cinder-rocky-ubuntu_bionic
+        # - openstack-helm-cinder-rocky-opensuse_15
+        # - openstack-helm-cinder-stein-ubuntu_bionic
+        # - openstack-helm-compute-kit
+        # - openstack-helm-compute-kit-pike-ubuntu_xenial
+        # - openstack-helm-compute-kit-queens-ubuntu_xenial
+        # - openstack-helm-compute-kit-rocky-ubuntu_xenial
+        # - openstack-helm-compute-kit-rocky-ubuntu_bionic
+        # - openstack-helm-compute-kit-rocky-opensuse_15
+        # - openstack-helm-compute-kit-stein-ubuntu_bionic
+        # - openstack-helm-horizon
+        # - openstack-helm-apparmor:
+        #     voting: false
+        # - openstack-helm-netpol-compute-kit:
+        #     voting: false
+        # - openstack-helm-netpol-cinder:
+        #     voting: false
     gate:
       jobs:
         - openstack-helm-lint
@@ -56,7 +57,7 @@
         # Keystone job that exersizes feature gate
         - openstack-helm-keystone-ldap
         # Unique periodic jobs
-        - openstack-helm-multinode-temp-ubuntu
+        - openstack-helm-multinode
         - openstack-helm-ironic-ubuntu
         - openstack-helm-armada-deploy
         - openstack-helm-armada-update-uuid

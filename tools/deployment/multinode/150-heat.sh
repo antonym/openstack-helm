@@ -15,6 +15,9 @@
 #    under the License.
 set -xe
 
+#NOTE: Get the over-rides to use
+: ${OSH_EXTRA_HELM_ARGS_HEAT:="$(./tools/deployment/common/get-values-overrides.sh heat)"}
+
 #NOTE: Deploy command
 tee /tmp/heat.yaml << EOF
 pod:

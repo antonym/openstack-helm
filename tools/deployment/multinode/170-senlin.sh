@@ -15,6 +15,9 @@
 #    under the License.
 set -xe
 
+#NOTE: Get the over-rides to use
+: ${OSH_EXTRA_HELM_ARGS_SENLIN:="$(./tools/deployment/common/get-values-overrides.sh senlin)"}
+
 #NOTE: Deploy command
 helm upgrade --install senlin ./senlin \
   --namespace=openstack \

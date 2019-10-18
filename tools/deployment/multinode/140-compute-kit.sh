@@ -15,6 +15,9 @@
 #    under the License.
 set -xe
 
+#NOTE: Get the over-rides to use
+: ${OSH_EXTRA_HELM_ARGS_NOVA:="$(./tools/deployment/common/get-values-overrides.sh nova)"}
+
 #NOTE: Deploy nova
 tee /tmp/nova.yaml << EOF
 labels:
@@ -150,12 +153,8 @@ conf:
         bridge_mappings: public:br-ex
 EOF
 
-if [ -n "$OSH_OPENSTACK_RELEASE" ]; then
-  if [ -e "./neutron/values_overrides/${OSH_OPENSTACK_RELEASE}.yaml" ] ; then
-    echo "Adding release overrides for ${OSH_OPENSTACK_RELEASE}"
-    OSH_RELEASE_OVERRIDES_NEUTRON="--values=./neutron/values_overrides/${OSH_OPENSTACK_RELEASE}.yaml"
-  fi
-fi
+#NOTE: Get the over-rides to use
+: ${OSH_EXTRA_HELM_ARGS_NEUTRON:="$(./tools/deployment/common/get-values-overrides.sh neutron)"}
 
 helm upgrade --install neutron ./neutron \
     --namespace=openstack \

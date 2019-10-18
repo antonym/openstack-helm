@@ -15,6 +15,9 @@
 #    under the License.
 set -xe
 
+#NOTE: Get the over-rides to use
+: ${OSH_EXTRA_HELM_ARGS_BARBICAN:="$(./tools/deployment/common/get-values-overrides.sh barbican)"}
+
 #NOTE: Deploy command
 helm upgrade --install barbican ./barbican \
   --namespace=openstack \

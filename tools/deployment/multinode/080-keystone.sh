@@ -16,6 +16,9 @@
 
 set -xe
 
+#NOTE: Get the over-rides to use
+: ${OSH_EXTRA_HELM_ARGS_KEYSTONE:="$(./tools/deployment/common/get-values-overrides.sh keystone)"}
+
 #NOTE: Deploy command
 helm upgrade --install keystone ./keystone \
     --namespace=openstack \
