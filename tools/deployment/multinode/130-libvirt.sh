@@ -15,6 +15,10 @@
 #    under the License.
 set -xe
 
+#NOTE: Get the over-rides to use
+export HELM_CHART_ROOT_PATH="${HELM_CHART_ROOT_PATH:="${OSH_INFRA_PATH:="../openstack-helm-infra"}"}"
+: ${OSH_EXTRA_HELM_ARGS_LIBVIRT:="$(./tools/deployment/common/get-values-overrides.sh libvirt)"}
+
 #NOTE: Deploy libvirt
 : ${OSH_INFRA_PATH:="../openstack-helm-infra"}
 helm upgrade --install libvirt ${OSH_INFRA_PATH}/libvirt \
